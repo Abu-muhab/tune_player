@@ -52,6 +52,9 @@ class AudioRepository(private val application: Application) {
             val nameColumn =
                 cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
 
+            /**
+             * iterate through query to get details of each audio retrieved
+             */
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val name = cursor.getString(nameColumn)
@@ -63,6 +66,9 @@ class AudioRepository(private val application: Application) {
             }
         }
 
+        /**
+         * launch several coroutines to get thumbnails from file for each audio object in parallel
+         */
         audios.forEach {
             launch {
                 withContext(Dispatchers.IO) {
