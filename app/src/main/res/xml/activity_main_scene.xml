@@ -52,7 +52,6 @@
                 android:rotation="-180"
                 motion:framePosition="50"
                 motion:motionTarget="@+id/collapse" />
-
         </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragUp"
@@ -68,7 +67,11 @@
             android:layout_height="80dp"
             motion:layout_constraintBottom_toBottomOf="@+id/myNavHostFragment"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintStart_toStartOf="parent">
+            <CustomAttribute
+                motion:attributeName="backgroundColor"
+                motion:customColorValue="?attr/colorPrimaryDark"/>
+        </Constraint>
         <Constraint
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
@@ -165,8 +168,13 @@
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/frameLayout"
+            android:background="?attr/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+            <CustomAttribute
+                motion:attributeName="backgroundColor"
+                motion:customColorValue="?attr/colorPrimary"/>
+        </Constraint>
         <Constraint
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
