@@ -123,4 +123,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/artistName"
         app:trackColor="@color/primaryLightColor" />
+
+    <ImageView
+        android:id="@+id/skipNext"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_baseline_play_arrow_24"
+        app:layout_constraintEnd_toStartOf="@id/pausePlay"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+    <ImageView
+        android:id="@+id/pausePlay"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_baseline_skip_next_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
 </androidx.constraintlayout.motion.widget.MotionLayout>
