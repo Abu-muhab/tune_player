@@ -44,6 +44,15 @@
                 android:alpha="0.2"
                 motion:framePosition="30"
                 motion:motionTarget="@+id/artistName2" />
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/collapse" />
+            <KeyAttribute
+                android:rotation="-180"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/collapse" />
+
         </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragUp"
@@ -63,7 +72,7 @@
         <Constraint
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="160dp"
             android:alpha="0.0"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -141,6 +150,16 @@
             motion:layout_constraintBottom_toBottomOf="@id/albumArt"
             motion:layout_constraintStart_toEndOf="@id/albumArt"
             motion:layout_constraintTop_toBottomOf="@+id/audioName2" />
+        <Constraint
+            android:id="@+id/collapse"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:alpha="0.0"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="@id/frameLayout" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -151,14 +170,7 @@
         <Constraint
             android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintEnd_toEndOf="@+id/myNavHostFragment"
-            motion:layout_constraintStart_toStartOf="parent" />
-        <Constraint
-            android:id="@+id/materialCardView"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="160dp"
             android:alpha="1.0"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -231,5 +243,15 @@
             android:alpha="0.0"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="@+id/audioName2" />
+        <Constraint
+            android:id="@+id/collapse"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:alpha="1.0"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="@id/frameLayout" />
     </ConstraintSet>
 </MotionScene>

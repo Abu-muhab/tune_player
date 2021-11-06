@@ -27,7 +27,7 @@
         android:id="@+id/materialCardView"
         style="@style/Widget.App.CardView.RoundedTop"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="160dp"
         app:cardBackgroundColor="?attr/colorPrimaryDark"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,6 +39,7 @@
             android:layout_height="match_parent">
 
             <ImageView
+                android:layout_marginTop="10dp"
                 android:id="@+id/imageView"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
@@ -46,13 +47,13 @@
                 android:backgroundTint="?attr/colorPrimary"
                 android:padding="20dp"
                 android:src="@drawable/ic_baseline_pause_24"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/white" />
 
             <ImageView
+                android:id="@+id/next"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="28dp"
@@ -63,6 +64,7 @@
                 app:tint="@color/white" />
 
             <ImageView
+                android:id="@+id/previous"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="28dp"
@@ -71,6 +73,40 @@
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintTop_toTopOf="@+id/imageView"
                 app:tint="@color/white" />
+
+            <ImageView
+                android:id="@+id/repeat"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_baseline_repeat_24"
+                app:layout_constraintStart_toStartOf="@id/previous"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:tint="@color/primaryLightColor" />
+
+            <ImageView
+                android:id="@+id/search"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_baseline_search_24"
+                app:layout_constraintBottom_toBottomOf="@id/repeat"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="@id/next"
+                app:layout_constraintTop_toTopOf="@id/repeat"
+                app:tint="@color/primaryLightColor" />
+
+            <ImageView
+                android:id="@+id/fav"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_baseline_favorite_border_24"
+                app:layout_constraintBottom_toBottomOf="@id/repeat"
+                app:layout_constraintEnd_toStartOf="@id/search"
+                app:layout_constraintStart_toEndOf="@id/repeat"
+                app:layout_constraintTop_toTopOf="@id/repeat"
+                app:tint="@color/primaryLightColor" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -152,7 +188,7 @@
         android:textColor="?attr/colorOnPrimary"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/artistName2"
@@ -164,4 +200,16 @@
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/audioName2" />
+
+    <ImageView
+        android:id="@+id/collapse"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/frameLayout"
+        app:tint="@color/white" />
 </androidx.constraintlayout.motion.widget.MotionLayout>
