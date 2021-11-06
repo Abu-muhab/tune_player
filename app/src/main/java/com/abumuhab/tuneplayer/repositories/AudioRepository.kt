@@ -5,6 +5,7 @@ import android.content.ContentUris
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import android.util.Size
 import com.abumuhab.tuneplayer.models.Audio
 import kotlinx.coroutines.Dispatchers
@@ -16,14 +17,9 @@ import kotlinx.coroutines.withContext
 class AudioRepository(private val application: Application) {
     @OptIn(ExperimentalCoroutinesApi::class)
     suspend fun listAudioFiles() = channelFlow {
-        val collection =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                MediaStore.Audio.Media.getContentUri(
-                    MediaStore.VOLUME_EXTERNAL
-                )
-            } else {
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-            }
+        val collection = MediaStore.Audio.Media.getContentUri(
+            MediaStore.VOLUME_EXTERNAL
+        )
 
         val projection = arrayOf(
             MediaStore.Audio.Media._ID,
@@ -51,6 +47,7 @@ class AudioRepository(private val application: Application) {
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
             val nameColumn =
                 cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DISPLAY_NAME)
+            val artisteColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Artists.ARTIST)
 
             /**
              * iterate through query to get details of each audio retrieved
@@ -58,11 +55,12 @@ class AudioRepository(private val application: Application) {
             while (cursor.moveToNext()) {
                 val id = cursor.getLong(idColumn)
                 val name = cursor.getString(nameColumn)
+                val artiste = cursor.getString(artisteColumn)
                 val contentUri: Uri = ContentUris.withAppendedId(
                     MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                     id
                 )
-                audios.add(Audio(name, id, contentUri))
+                audios.add(Audio(name, id.toString(), contentUri, artiste))
             }
         }
 

@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/nowPlayingFragment">
+    app:startDestination="@id/tracksFragment">
 
     <fragment
-        android:id="@+id/nowPlayingFragment"
-        android:name="com.abumuhab.tuneplayer.fragments.NowPlayingFragment"
-        tools:layout="@layout/fragment_now_playing"
-        android:label="NowPlayingFragment" />
+        android:id="@+id/tracksFragment"
+        android:name="com.abumuhab.tuneplayer.fragments.TracksFragment"
+        android:label="NowPlayingFragment"
+        tools:layout="@layout/fragment_tracks" />
     <fragment
         android:id="@+id/placeHolderFragment"
         android:name="com.abumuhab.tuneplayer.fragments.PlaceHolderFragment"
