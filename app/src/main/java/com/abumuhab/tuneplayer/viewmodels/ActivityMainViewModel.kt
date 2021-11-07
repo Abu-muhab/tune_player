@@ -3,11 +3,12 @@ package com.abumuhab.tuneplayer.viewmodels
 import android.app.Application
 import android.content.ComponentName
 import android.media.session.PlaybackState
+import android.net.Uri
+import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -27,7 +28,7 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
 
 
     init {
-        showMusicControls.value = false
+//        showMusicControls.value = false
         connectToMediaPlaybackService()
     }
 
@@ -55,8 +56,27 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
                         MediaControllerCompat(application.applicationContext, token)
                     mediaController!!.registerCallback(object : MediaControllerCompat.Callback() {
                         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+                            val bundle = state!!.extras
                             isPaused.value =
-                                (state!!.playbackState as PlaybackState).state == PlaybackStateCompat.STATE_PAUSED
+                                (state.playbackState as PlaybackState).state == PlaybackStateCompat.STATE_PAUSED
+
+                            /**
+                             * When the queue is null, this signifies that an already existing
+                             * existing connection to the service was running before user closed app.
+                             * Hence, get the current playing or paused mediaItem data from the state extras and refetch queue
+                             */
+                            if (showMusicControls.value == null && queue == null) {
+                                showMusicControls.value = true
+                                val audio = Audio(
+                                    bundle!!.getString("title").toString(),
+                                    bundle.getString("id").toString(),
+                                    Uri.parse(bundle.getString("uri").toString()),
+                                    bundle.getString("subtitle").toString()
+                                )
+                                nowPlaying.value = audio
+
+                                //TODO: fetch queue
+                            }
 
                             queue?.let { queue ->
                                 state.activeQueueItemId

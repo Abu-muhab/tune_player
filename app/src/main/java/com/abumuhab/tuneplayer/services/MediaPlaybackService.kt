@@ -240,6 +240,13 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                         )
                     }
 
+                    val bundle = Bundle()
+                    bundle.putString("title", nowPlaying!!.description.title.toString())
+                    bundle.putString("subtitle", nowPlaying!!.description.subtitle.toString())
+                    bundle.putString("id", nowPlaying!!.description.mediaId)
+                    bundle.putString("uri", nowPlaying!!.description.mediaUri.toString())
+                    stateBuilder.setExtras(bundle)
+
                     mediaSession?.setPlaybackState(stateBuilder.build())
                     delay(500)
                 } catch (e: Exception) {
