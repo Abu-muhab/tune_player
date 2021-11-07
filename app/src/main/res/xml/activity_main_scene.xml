@@ -80,9 +80,9 @@
         </KeyFrameSet>
         <OnSwipe
             motion:dragDirection="dragUp"
+            motion:nestedScrollFlags="supportScrollUp"
             motion:touchAnchorId="@+id/frameLayout"
-            motion:touchAnchorSide="top"
-            motion:touchRegionId="@+id/frameLayout" />
+            motion:touchAnchorSide="top" />
     </Transition>
 
     <ConstraintSet

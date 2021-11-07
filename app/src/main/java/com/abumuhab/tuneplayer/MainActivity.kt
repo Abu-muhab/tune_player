@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
             binding.artistName2.text = it.artiste
         }
 
+
         viewModel.showMusicControls.observe(this) {
             it?.let {
                 if (it) {

@@ -2,6 +2,7 @@ package com.abumuhab.tuneplayer.viewmodels
 
 import android.app.Application
 import android.content.ComponentName
+import android.media.session.PlaybackState
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -16,17 +17,34 @@ import com.abumuhab.tuneplayer.util.findItemPositionInList
 
 class ActivityMainViewModel(private val application: Application) : ViewModel() {
     lateinit var mediaBrowser: MediaBrowserCompat
-    lateinit var mediaController: MediaControllerCompat
+    var mediaController: MediaControllerCompat? = null
     lateinit var connectionCallBack: MediaBrowserCompat.ConnectionCallback
     var queue: MutableList<MediaSessionCompat.QueueItem>? = null
 
     val showMusicControls = MutableLiveData<Boolean>()
     var nowPlaying = MutableLiveData<Audio>()
+    var isPaused = MutableLiveData<Boolean>()
 
 
     init {
         showMusicControls.value = false
         connectToMediaPlaybackService()
+    }
+
+    fun skipToNext() {
+        mediaController?.transportControls?.skipToNext()
+    }
+
+    fun skipToPrevious() {
+        mediaController?.transportControls?.skipToPrevious()
+    }
+
+    fun pausePLay() {
+        if (isPaused.value == false) {
+            mediaController?.transportControls?.pause()
+        } else {
+            mediaController?.transportControls?.play()
+        }
     }
 
     private fun connectToMediaPlaybackService() {
@@ -35,32 +53,29 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
                 mediaBrowser.sessionToken.also { token ->
                     mediaController =
                         MediaControllerCompat(application.applicationContext, token)
-                    mediaController.registerCallback(object : MediaControllerCompat.Callback() {
+                    mediaController!!.registerCallback(object : MediaControllerCompat.Callback() {
                         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
-                            state?.let {
-                                queue?.let { queue ->
-                                    state.activeQueueItemId
-                                    val nowPlayingQueuePosition =
-                                        findItemPositionInList(queue) { queueItem ->
-                                            state.activeQueueItemId == queueItem.queueId
-                                        }
+                            isPaused.value =
+                                (state!!.playbackState as PlaybackState).state == PlaybackStateCompat.STATE_PAUSED
 
-                                    val mediaDescription =
-                                        queue[nowPlayingQueuePosition].description
+                            queue?.let { queue ->
+                                state.activeQueueItemId
+                                val nowPlayingQueuePosition =
+                                    findItemPositionInList(queue) { queueItem ->
+                                        state.activeQueueItemId == queueItem.queueId
+                                    }
 
-                                    val audio = Audio(
-                                        mediaDescription.title.toString(),
-                                        mediaDescription.mediaId.toString(),
-                                        mediaDescription.mediaUri!!,
-                                        mediaDescription.subtitle.toString()
-                                    )
+                                val mediaDescription =
+                                    queue[nowPlayingQueuePosition].description
 
-                                    nowPlaying.value = audio
+                                val audio = Audio(
+                                    mediaDescription.title.toString(),
+                                    mediaDescription.mediaId.toString(),
+                                    mediaDescription.mediaUri!!,
+                                    mediaDescription.subtitle.toString()
+                                )
 
-//                                    if (showMusicControls.value == false) {
-//                                        showMusicControls.value = true
-//                                    }
-                                }
+                                nowPlaying.value = audio
                             }
                         }
 

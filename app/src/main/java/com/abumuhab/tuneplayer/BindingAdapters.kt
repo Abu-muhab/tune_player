@@ -22,7 +22,7 @@ fun bindImage(imageView: ImageView, audioThumbnail: Audio?) {
                 try {
                     thumbnail = imageView.context.contentResolver.loadThumbnail(
                         it.uri,
-                        Size(200, 200),
+                        Size(400, 400),
                         null
                     )
                 } catch (err: Exception) {
