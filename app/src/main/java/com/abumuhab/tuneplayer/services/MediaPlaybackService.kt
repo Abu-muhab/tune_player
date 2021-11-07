@@ -9,14 +9,11 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.abumuhab.tuneplayer.R
 import com.abumuhab.tuneplayer.repositories.AudioRepository
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.toList
 import java.lang.Exception
 
 class MediaPlaybackService : MediaBrowserServiceCompat() {

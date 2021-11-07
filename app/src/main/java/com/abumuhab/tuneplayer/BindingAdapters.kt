@@ -2,7 +2,6 @@ package com.abumuhab.tuneplayer
 
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
-import android.graphics.ColorFilter
 import android.util.Size
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources

@@ -4,16 +4,11 @@ import android.app.Application
 import android.content.ComponentName
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.abumuhab.tuneplayer.models.Audio
-import com.abumuhab.tuneplayer.repositories.AudioRepository
 import com.abumuhab.tuneplayer.services.MediaPlaybackService
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
 
 class TracksViewModel(private val application: Application) : ViewModel() {
     lateinit var mediaBrowser: MediaBrowserCompat
