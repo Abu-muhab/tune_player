@@ -25,7 +25,11 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
     private lateinit var audioRepository: AudioRepository
 
     private var currentQueue: MutableList<MediaSessionCompat.QueueItem>? = null
+    private var activeQueueItemId: Long? = null
     private var nowPlaying: MediaBrowserCompat.MediaItem? = null
+
+    private val musicPlaybackServiceScope = CoroutineScope(Dispatchers.Main)
+    private var mediaPlayBackStateUpdateJob: Job? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -43,12 +47,21 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                 override fun onSkipToNext() {
                     if (currentQueue != null && nowPlaying != null) {
                         /**
-                         * Get the position od the nowPlaying mediaItem on the queue
+                         * Get the position of the nowPlaying mediaItem on the queue
                          */
                         val activeQueItemPosition =
                             findItemPositionInList(currentQueue!!.toList()) { queueItem ->
                                 queueItem.description.mediaId == nowPlaying!!.mediaId
                             }
+
+
+                        /**
+                         * if active queue position is last on queue, do nothing
+                         */
+                        if (activeQueItemPosition == currentQueue!!.size - 1) {
+                            return
+                        }
+
 
                         /**
                          * Get the mediaDescription of the next item on the ques and create the mediaItem to be played
@@ -64,6 +77,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                         playMediaItem(nextMediaItem) {
                             onSkipToNext()
                         }
+                        activeQueueItemId = activeQueItemPosition + 1L
                     }
                 }
 
@@ -102,20 +116,15 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                             onSkipToNext()
                         }
 
-                        /**
-                         * Update playback information
-                         */
-                        stateBuilder = PlaybackStateCompat.Builder()
-                            .setActions(PlaybackStateCompat.ACTION_PAUSE or PlaybackStateCompat.ACTION_SKIP_TO_NEXT or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
-                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1F)
-                            .setActiveQueueItemId(0)
-                        setPlaybackState(stateBuilder.build())
-
 
                         /**
                          * Generate playback queue
                          */
                         currentQueue = generateQueue(mediaId)
+                        activeQueueItemId =
+                            findItemPositionInList(currentQueue!!.toList()) { queueItem ->
+                                queueItem.description.mediaId == nowPlaying!!.mediaId
+                            }.toLong()
                         setQueue(currentQueue)
                     }
 
@@ -136,6 +145,47 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
 
             isActive = true
         }
+    }
+
+    private fun startPlaybackStateUpdateJob() {
+        mediaPlayBackStateUpdateJob?.let {
+            if (it.isActive) {
+                return
+            } else if (it.isCompleted) {
+                it.start()
+                return
+            }
+        }
+        mediaPlayBackStateUpdateJob = musicPlaybackServiceScope.launch {
+            while (true) {
+                try {
+                    stateBuilder.setActiveQueueItemId(activeQueueItemId!!).setState(
+                        PlaybackStateCompat.STATE_PLAYING,
+                        mediaPlayer!!.currentPosition.toLong(),
+                        1F,
+                        1
+                    )
+                        .setActions(
+                            PlaybackStateCompat.ACTION_PAUSE or
+                                    PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                        )
+
+                    mediaSession?.setPlaybackState(stateBuilder.build())
+                    delay(1000)
+                } catch (e: Exception) {
+                }
+
+                if (mediaSession == null || mediaPlayer == null || nowPlaying == null || !mediaPlayer!!.isPlaying) {
+                    break
+                }
+            }
+            mediaPlayBackStateUpdateJob?.cancel()
+        }
+    }
+
+    fun stopPlaybackStateUpdateJob() {
+        mediaPlayBackStateUpdateJob?.cancel()
     }
 
     override fun onGetRoot(
@@ -205,7 +255,13 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                     setOnCompletionListener {
                         onFinishedPlaying()
                     }
+
                 }
+
+        /**
+         * Start the playbackStateUpdateJob to send playback updates to listeners while playing
+         */
+        startPlaybackStateUpdateJob()
     }
 
 
