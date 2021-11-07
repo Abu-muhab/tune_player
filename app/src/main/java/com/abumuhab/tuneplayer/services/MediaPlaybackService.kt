@@ -3,19 +3,17 @@ package com.abumuhab.tuneplayer.services
 
 import android.content.Intent
 import android.media.MediaPlayer
-import android.media.browse.MediaBrowser
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.abumuhab.tuneplayer.R
 import com.abumuhab.tuneplayer.repositories.AudioRepository
 import com.abumuhab.tuneplayer.util.createNotificationChannel
+import com.abumuhab.tuneplayer.util.findItemPositionInList
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -25,6 +23,9 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
     private val mediaItems = arrayListOf<MediaBrowserCompat.MediaItem>()
     private lateinit var audioRepository: AudioRepository
+
+    private var currentQueue: MutableList<MediaSessionCompat.QueueItem>? = null
+    private var nowPlaying: MediaBrowserCompat.MediaItem? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -39,7 +40,38 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             setPlaybackState(stateBuilder.build())
 
             setCallback(object : MediaSessionCompat.Callback() {
+                override fun onSkipToNext() {
+                    if (currentQueue != null && nowPlaying != null) {
+                        /**
+                         * Get the position od the nowPlaying mediaItem on the queue
+                         */
+                        val activeQueItemPosition =
+                            findItemPositionInList(currentQueue!!.toList()) { queueItem ->
+                                queueItem.description.mediaId == nowPlaying!!.mediaId
+                            }
+
+                        /**
+                         * Get the mediaDescription of the next item on the ques and create the mediaItem to be played
+                         */
+                        val nextMediaItem = MediaBrowserCompat.MediaItem(
+                            currentQueue!![activeQueItemPosition + 1].description,
+                            0
+                        )
+
+                        /**
+                         * PLay the nex media item
+                         */
+                        playMediaItem(nextMediaItem) {
+                            onSkipToNext()
+                        }
+                    }
+                }
+
                 override fun onPlayFromMediaId(mediaId: String, extras: Bundle?) {
+                    /**
+                     * Start in foreground and display ongoing notification
+                     */
+                    //TODO: replace placeholder notification
                     createNotificationChannel(applicationContext, "Playback", "Playback")
                     val builder =
                         NotificationCompat.Builder(applicationContext, "Playback").apply {
@@ -49,6 +81,11 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         }
                     startForeground(-8000, builder.build())
+
+
+                    /**
+                     * start service so it isn't bound to the UI and can continue playing in the background
+                     */
                     this@MediaPlaybackService.startService(
                         Intent(
                             applicationContext,
@@ -58,23 +95,28 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
 
                     val mediaItem = findMediaItemById(mediaId, mediaItems)
                     mediaItem?.let {
-                        // stop media player if active before sounding another alarm
-                        mediaPlayer?.apply {
-                            try {
-                                stop()
-                                release()
-                            } catch (e: Exception) {
-                                //do nothing. This just means we attempted to stop the player while nothing was being played
-                            }
+                        /**
+                         * Play mediaItem
+                         */
+                        playMediaItem(mediaItem) {
+                            onSkipToNext()
                         }
-                        mediaPlayer =
-                            MediaPlayer.create(applicationContext, mediaItem.description.mediaUri)
-                                .apply {
-                                    start()
-                                    setOnCompletionListener {
-                                        onSkipToNext()
-                                    }
-                                }
+
+                        /**
+                         * Update playback information
+                         */
+                        stateBuilder = PlaybackStateCompat.Builder()
+                            .setActions(PlaybackStateCompat.ACTION_PAUSE or PlaybackStateCompat.ACTION_SKIP_TO_NEXT or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS)
+                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1F)
+                            .setActiveQueueItemId(0)
+                        setPlaybackState(stateBuilder.build())
+
+
+                        /**
+                         * Generate playback queue
+                         */
+                        currentQueue = generateQueue(mediaId)
+                        setQueue(currentQueue)
                     }
 
                 }
@@ -121,6 +163,49 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
         } else {
             result.sendResult(null)
         }
+    }
+
+    fun generateQueue(mediaId: String): MutableList<MediaSessionCompat.QueueItem> {
+//        val positionInQueue = findItemPositionInList(mediaItems) { mediaItem ->
+//            mediaItem.description.mediaId == mediaId
+//        }
+
+        var queueCount = 0L
+        val queueItems = mutableListOf<MediaSessionCompat.QueueItem>()
+        mediaItems.forEach {
+            queueItems.add(MediaSessionCompat.QueueItem(it.description, queueCount))
+            queueCount++
+        }
+        return queueItems.toMutableList()
+    }
+
+
+    fun playMediaItem(mediaItem: MediaBrowserCompat.MediaItem, onFinishedPlaying: () -> Unit) {
+        /**
+         * Stop mediaPlayer if active before creating a new instance
+         */
+        mediaPlayer?.apply {
+            try {
+                stop()
+                release()
+                nowPlaying = null
+            } catch (e: Exception) {
+                //do nothing. This just means we attempted to stop the player while nothing was being played
+            }
+        }
+
+        /**
+         * Create new instance of mediaPlayer with the given mediaUri
+         */
+        mediaPlayer =
+            MediaPlayer.create(applicationContext, mediaItem.description.mediaUri)
+                .apply {
+                    start()
+                    nowPlaying = mediaItem
+                    setOnCompletionListener {
+                        onFinishedPlaying()
+                    }
+                }
     }
 
 

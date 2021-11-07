@@ -20,7 +20,6 @@ class AudioAdapter(private val mediaController: MediaControllerCompat?) :
         fun bind(audio: Audio) {
             binding.audio = audio
             binding.tileContainer.setOnClickListener {
-                Log.i("CLICKEDD", "CCCCC")
                 mediaController?.transportControls?.playFromMediaId(audio.id, null)
             }
             binding.executePendingBindings()
