@@ -3,6 +3,7 @@ package com.abumuhab.tuneplayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.abumuhab.tuneplayer.databinding.ActivityMainBinding
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
 
         binding.collapse.setOnClickListener {
             binding.motionLayout.setTransition(R.id.second)

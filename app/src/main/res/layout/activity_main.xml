@@ -192,15 +192,22 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginEnd="15dp"
-            android:src="@drawable/ic_baseline_play_arrow_24"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{()->viewModel.pausePLay()}"
+            android:src="@{viewModel.isPaused==false?@drawable/ic_baseline_pause_24:@drawable/ic_baseline_play_arrow_24}"
             app:layout_constraintEnd_toStartOf="@id/pausePlay"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/white" />
+            app:tint="@color/white"
+            tools:src="@drawable/ic_baseline_play_arrow_24" />
 
         <ImageView
             android:id="@+id/pausePlay"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:onClick="@{()->viewModel.skipToNext()}"
             android:src="@drawable/ic_baseline_skip_next_24"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -233,14 +240,14 @@
             tools:text="Dean Lewis" />
 
         <ImageView
-            android:clickable="true"
-            android:focusable="true"
             android:id="@+id/collapse"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
+            android:clickable="true"
+            android:focusable="true"
             android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/frameLayout"
