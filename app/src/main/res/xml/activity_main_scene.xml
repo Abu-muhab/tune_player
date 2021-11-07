@@ -213,20 +213,24 @@
             motion:layout_constraintEnd_toEndOf="parent" />
         <Constraint
             android:id="@+id/audioName2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             android:alpha="1.0"
             motion:layout_constraintBottom_toTopOf="@id/artistName2"
+            motion:layout_constraintEnd_toEndOf="@id/skipNext"
             motion:layout_constraintStart_toEndOf="@id/albumArt"
             motion:layout_constraintTop_toTopOf="@id/albumArt" />
         <Constraint
             android:id="@+id/artistName2"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             android:alpha="1.0"
             motion:layout_constraintBottom_toBottomOf="@id/albumArt"
+            motion:layout_constraintEnd_toEndOf="@id/skipNext"
             motion:layout_constraintStart_toEndOf="@id/albumArt"
             motion:layout_constraintTop_toBottomOf="@+id/audioName2" />
         <Constraint
@@ -274,18 +278,22 @@
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@+id/audioName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
             android:alpha="1.0"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="@id/albumArt" />
         <Constraint
             android:id="@+id/artistName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
             android:alpha="1.0"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent"

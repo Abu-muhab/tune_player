@@ -38,7 +38,7 @@ class AudioAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val audio = getItem(position)
-        holder.bind(audio,onPressed)
+        holder.bind(audio, onPressed)
     }
 }
 

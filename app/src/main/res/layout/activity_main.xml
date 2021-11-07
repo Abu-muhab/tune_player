@@ -125,36 +125,43 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_marginTop="100dp"
-            android:src="@drawable/lweis"
+            app:audioThumbnail="@{viewModel.nowPlaying}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/lweis" />
 
         <TextView
             android:id="@+id/audioName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:text="Be Alright"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textAlignment="center"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="26sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/albumArt" />
+            app:layout_constraintTop_toBottomOf="@id/albumArt"
+            tools:text="Be Alright" />
 
         <TextView
             android:id="@+id/artistName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Dean Lewis"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textAlignment="center"
             android:textColor="@color/primaryLightColor"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/audioName" />
+            app:layout_constraintTop_toBottomOf="@+id/audioName"
+            tools:text="Dean Lewis" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/musicProgress"
@@ -194,22 +201,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Be Alright"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Be Alright" />
 
         <TextView
             android:id="@+id/artistName2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="Dean Lewis"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/primaryLightColor"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/audioName2" />
+            app:layout_constraintTop_toBottomOf="@+id/audioName2"
+            tools:text="Dean Lewis" />
 
         <ImageView
             android:id="@+id/collapse"

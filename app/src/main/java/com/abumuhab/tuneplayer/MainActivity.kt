@@ -35,16 +35,24 @@ class MainActivity : AppCompatActivity() {
             false
         )
 
+        viewModel.nowPlaying.observe(this) {
+            binding.audioName.text = it.name
+            binding.audioName2.text = it.name
+            binding.artistName.text = it.artiste
+            binding.artistName2.text = it.artiste
+        }
+
         viewModel.showMusicControls.observe(this) {
             it?.let {
                 if (it) {
-//                    binding.motionLayout.transitionToEnd()
-//                    binding.motionLayout.setTransition(R.id.second)
-//                    binding.motionLayout.transitionToEnd()
+                    binding.motionLayout.setTransition(R.id.first)
+                    binding.motionLayout.transitionToEnd()
                 }
             }
         }
 
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         setContentView(binding.root)
     }
 }

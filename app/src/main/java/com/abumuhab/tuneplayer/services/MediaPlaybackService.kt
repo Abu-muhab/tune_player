@@ -130,6 +130,10 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
 
                 }
 
+                override fun onPause() {
+
+                }
+
                 override fun onStop() {
                     mediaSession
                     mediaPlayer?.apply {
@@ -216,10 +220,6 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
     }
 
     fun generateQueue(mediaId: String): MutableList<MediaSessionCompat.QueueItem> {
-//        val positionInQueue = findItemPositionInList(mediaItems) { mediaItem ->
-//            mediaItem.description.mediaId == mediaId
-//        }
-
         var queueCount = 0L
         val queueItems = mutableListOf<MediaSessionCompat.QueueItem>()
         mediaItems.forEach {

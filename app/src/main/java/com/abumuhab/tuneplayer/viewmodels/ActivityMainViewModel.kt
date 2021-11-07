@@ -48,16 +48,18 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
                                     val mediaDescription =
                                         queue[nowPlayingQueuePosition].description
 
-                                    nowPlaying.value = Audio(
+                                    val audio = Audio(
                                         mediaDescription.title.toString(),
                                         mediaDescription.mediaId.toString(),
                                         mediaDescription.mediaUri!!,
                                         mediaDescription.subtitle.toString()
                                     )
 
-                                    if (showMusicControls.value == false) {
-                                        showMusicControls.value = true
-                                    }
+                                    nowPlaying.value = audio
+
+//                                    if (showMusicControls.value == false) {
+//                                        showMusicControls.value = true
+//                                    }
                                 }
                             }
                         }
