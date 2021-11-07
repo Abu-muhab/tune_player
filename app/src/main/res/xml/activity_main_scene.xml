@@ -3,6 +3,30 @@
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
     <Transition
+        android:id="@+id/first"
+        motion:constraintSetEnd="@+id/start"
+        motion:constraintSetStart="@+id/init"
+        motion:duration="400">
+        <KeyFrameSet>
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/audioName2" />
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/artistName2" />
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/pausePlay" />
+            <KeyAttribute
+                android:alpha="0.0"
+                motion:framePosition="50"
+                motion:motionTarget="@+id/skipNext" />
+        </KeyFrameSet>
+    </Transition>
+    <Transition
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
         motion:duration="1000">
@@ -60,17 +84,68 @@
             motion:touchRegionId="@+id/frameLayout" />
     </Transition>
 
+    <ConstraintSet
+        android:id="@+id/init"
+        motion:deriveConstraintsFrom="@+id/start">
+        <Constraint
+            android:id="@+id/myNavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="0dp" />
+        <Constraint
+            android:id="@+id/frameLayout"
+            android:layout_marginBottom="0dp"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toBottomOf="parent" />
+        <Constraint
+            android:id="@+id/albumArt"
+            motion:layout_constraintBottom_toBottomOf="@id/frameLayout"
+            motion:layout_constraintStart_toStartOf="@id/frameLayout"
+            motion:layout_constraintTop_toTopOf="@id/frameLayout" />
+        <Constraint
+            android:id="@+id/pausePlay"
+            android:layout_marginRight="10dp"
+            android:alpha="0.0"
+            motion:layout_constraintBottom_toBottomOf="@id/frameLayout"
+            motion:layout_constraintEnd_toEndOf="@id/frameLayout"
+            motion:layout_constraintTop_toTopOf="@id/frameLayout" />
+        <Constraint
+            android:id="@+id/skipNext"
+            android:layout_marginRight="10dp"
+            android:alpha="0.0"
+            motion:layout_constraintBottom_toBottomOf="@id/pausePlay"
+            motion:layout_constraintEnd_toStartOf="@id/pausePlay"
+            motion:layout_constraintTop_toTopOf="@id/pausePlay" />
+        <Constraint
+            android:id="@+id/audioName2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.0"
+            motion:layout_constraintBottom_toTopOf="@id/artistName2"
+            motion:layout_constraintStart_toEndOf="@id/albumArt"
+            motion:layout_constraintTop_toTopOf="@id/frameLayout" />
+        <Constraint
+            android:id="@+id/artistName2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.0"
+            motion:layout_constraintBottom_toBottomOf="@id/albumArt"
+            motion:layout_constraintStart_toStartOf="@id/audioName2"
+            motion:layout_constraintTop_toBottomOf="@id/audioName2" />
+    </ConstraintSet>
+
     <ConstraintSet android:id="@+id/start">
         <Constraint
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            motion:layout_constraintBottom_toBottomOf="@+id/myNavHostFragment"
+            motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toStartOf="parent">
             <CustomAttribute
                 motion:attributeName="backgroundColor"
-                motion:customColorValue="?attr/colorPrimaryDark"/>
+                motion:customColorValue="?attr/colorPrimaryDark" />
         </Constraint>
         <Constraint
             android:id="@+id/materialCardView"
@@ -163,17 +238,22 @@
             android:alpha="0.0"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toTopOf="@id/frameLayout" />
+        <Constraint
+            android:id="@+id/myNavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="80dp" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
             android:id="@+id/frameLayout"
-            android:background="?attr/colorPrimary"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary">
             <CustomAttribute
                 motion:attributeName="backgroundColor"
-                motion:customColorValue="?attr/colorPrimary"/>
+                motion:customColorValue="?attr/colorPrimary" />
         </Constraint>
         <Constraint
             android:id="@+id/materialCardView"

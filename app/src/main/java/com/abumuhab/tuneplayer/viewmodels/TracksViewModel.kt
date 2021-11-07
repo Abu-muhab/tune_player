@@ -18,10 +18,10 @@ class TracksViewModel(private val application: Application) : ViewModel() {
     val audios = MutableLiveData<List<Audio>>()
 
     init {
-        getAudioFiles()
+        connectToMediaPlaybackService()
     }
 
-    private fun getAudioFiles() {
+    private fun connectToMediaPlaybackService() {
         connectionCallBack = object : MediaBrowserCompat.ConnectionCallback() {
             override fun onConnected() {
                 mediaBrowser.sessionToken.also { token ->
