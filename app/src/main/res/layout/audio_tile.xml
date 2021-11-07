@@ -11,6 +11,9 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tileContainer"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -20,7 +23,7 @@
             android:id="@+id/thumbnail"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:src="@drawable/lweis"
+            android:src="@drawable/album"
             app:audioThumbnail="@{audio}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -3,16 +3,19 @@ package com.abumuhab.tuneplayer.services
 
 import android.content.Intent
 import android.media.MediaPlayer
+import android.media.browse.MediaBrowser
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.media.MediaBrowserServiceCompat
 import com.abumuhab.tuneplayer.R
 import com.abumuhab.tuneplayer.repositories.AudioRepository
+import com.abumuhab.tuneplayer.util.createNotificationChannel
 import kotlinx.coroutines.*
 import java.lang.Exception
 
@@ -36,9 +39,10 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             setPlaybackState(stateBuilder.build())
 
             setCallback(object : MediaSessionCompat.Callback() {
-                override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
+                override fun onPlayFromMediaId(mediaId: String, extras: Bundle?) {
+                    createNotificationChannel(applicationContext, "Playback", "Playback")
                     val builder =
-                        NotificationCompat.Builder(applicationContext, "alarm").apply {
+                        NotificationCompat.Builder(applicationContext, "Playback").apply {
                             setOngoing(true)
                             setContentTitle("New alarm")
                             setSmallIcon(R.drawable.ic_baseline_favorite_border_24)
@@ -52,20 +56,25 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                         )
                     )
 
-                    // stop media player if active before sounding another alarm
-                    mediaPlayer?.apply {
-                        try {
-                            stop()
-                            release()
-                        } catch (e: Exception) {
-                            //do nothing. This just means we attempted to stop the player while nothing was being played
+                    val mediaItem = findMediaItemById(mediaId, mediaItems)
+                    mediaItem?.let {
+                        // stop media player if active before sounding another alarm
+                        mediaPlayer?.apply {
+                            try {
+                                stop()
+                                release()
+                            } catch (e: Exception) {
+                                //do nothing. This just means we attempted to stop the player while nothing was being played
+                            }
                         }
-                    }
-                    mediaPlayer = MediaPlayer.create(applicationContext, uri).apply {
-                        start()
-                        setOnCompletionListener {
-                            onSkipToNext()
-                        }
+                        mediaPlayer =
+                            MediaPlayer.create(applicationContext, mediaItem.description.mediaUri)
+                                .apply {
+                                    start()
+                                    setOnCompletionListener {
+                                        onSkipToNext()
+                                    }
+                                }
                     }
 
                 }
@@ -112,5 +121,13 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
         } else {
             result.sendResult(null)
         }
+    }
+
+
+    fun findMediaItemById(
+        mediaId: String,
+        list: List<MediaBrowserCompat.MediaItem>
+    ): MediaBrowserCompat.MediaItem? {
+        return list.firstOrNull { it.description.mediaId == mediaId }
     }
 }

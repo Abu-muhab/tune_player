@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.ComponentName
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,8 +13,10 @@ import com.abumuhab.tuneplayer.services.MediaPlaybackService
 
 class TracksViewModel(private val application: Application) : ViewModel() {
     lateinit var mediaBrowser: MediaBrowserCompat
-    lateinit var mediaController: MediaControllerCompat
+    private var _mediaController: MediaControllerCompat? = null
+    var mediaController = MutableLiveData<MediaControllerCompat>()
     private lateinit var connectionCallBack: MediaBrowserCompat.ConnectionCallback
+
 
     val audios = MutableLiveData<List<Audio>>()
 
@@ -25,12 +28,13 @@ class TracksViewModel(private val application: Application) : ViewModel() {
         connectionCallBack = object : MediaBrowserCompat.ConnectionCallback() {
             override fun onConnected() {
                 mediaBrowser.sessionToken.also { token ->
-                    mediaController =
-                        MediaControllerCompat(application.applicationContext, token)
-                    mediaController.registerCallback(object : MediaControllerCompat.Callback() {
+                    _mediaController =
+                        MediaControllerCompat(application.applicationContext, token).apply {
+                            registerCallback(object : MediaControllerCompat.Callback() {
 
-                    })
-
+                            })
+                        }
+                    mediaController.value=_mediaController
                 }
                 mediaBrowser.subscribe(
                     "tracks",

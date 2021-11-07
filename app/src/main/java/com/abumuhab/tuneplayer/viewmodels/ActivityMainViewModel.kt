@@ -15,11 +15,11 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
     lateinit var mediaController: MediaControllerCompat
     lateinit var connectionCallBack: MediaBrowserCompat.ConnectionCallback
 
-    val showMusicControls= MutableLiveData<Boolean>()
+    val showMusicControls = MutableLiveData<Boolean>()
 
 
     init {
-        showMusicControls.value=false
+        showMusicControls.value = false
         connectToMediaPlaybackService()
     }
 

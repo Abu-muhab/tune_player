@@ -1,5 +1,7 @@
 package com.abumuhab.tuneplayer.adapters
 
+import android.support.v4.media.session.MediaControllerCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,11 +10,19 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abumuhab.tuneplayer.databinding.AudioTileBinding
 import com.abumuhab.tuneplayer.models.Audio
 
-class AudioAdapter : ListAdapter<Audio, AudioAdapter.ViewHolder>(AudioDiffCallback()) {
-    class ViewHolder(private val binding: AudioTileBinding) :
+class AudioAdapter(private val mediaController: MediaControllerCompat?) :
+    ListAdapter<Audio, AudioAdapter.ViewHolder>(AudioDiffCallback()) {
+    class ViewHolder(
+        private val binding: AudioTileBinding,
+        private val mediaController: MediaControllerCompat?
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(audio: Audio) {
             binding.audio = audio
+            binding.tileContainer.setOnClickListener {
+                Log.i("CLICKEDD", "CCCCC")
+                mediaController?.transportControls?.playFromMediaId(audio.id, null)
+            }
             binding.executePendingBindings()
         }
     }
@@ -20,7 +30,7 @@ class AudioAdapter : ListAdapter<Audio, AudioAdapter.ViewHolder>(AudioDiffCallba
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val binding = AudioTileBinding.inflate(layoutInflater, parent, false)
-        return ViewHolder(binding)
+        return ViewHolder(binding, mediaController)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
