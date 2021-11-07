@@ -26,12 +26,19 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
     val showMusicControls = MutableLiveData<Boolean>()
     var nowPlaying = MutableLiveData<Audio>()
     var isPaused = MutableLiveData<Boolean>()
+    val nowPlayingDuration = MutableLiveData<Float>()
     var nowPlayingProgress = MutableLiveData<Float>()
 
 
     init {
-//        showMusicControls.value = false
         connectToMediaPlaybackService()
+    }
+
+    fun seekTo(percentage: Float) {
+        nowPlayingDuration.value?.let {
+            val pos = percentage * nowPlayingDuration.value!!
+            mediaController?.transportControls?.seekTo(pos.toLong())
+        }
     }
 
     fun skipToNext() {
@@ -81,10 +88,16 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
                             }
 
                             /**
+                             * set the duration on the nowplaying media Item
+                             */
+                            nowPlayingDuration.value = bundle!!.getInt("duration").toFloat()
+
+                            /**
                              * Compute progress percentage
                              */
                             nowPlayingProgress.value =
-                                state.position.toFloat() / bundle!!.getInt("duration").toFloat()
+                                state.position.toFloat() / nowPlayingDuration.value!!
+
 
                             queue?.let { queue ->
                                 state.activeQueueItemId

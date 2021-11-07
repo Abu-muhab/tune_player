@@ -45,6 +45,10 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
             setPlaybackState(stateBuilder.build())
 
             setCallback(object : MediaSessionCompat.Callback() {
+                override fun onSeekTo(pos: Long) {
+                    mediaPlayer?.seekTo(pos.toInt())
+                }
+
                 override fun onSkipToPrevious() {
                     if (currentQueue != null && nowPlaying != null) {
                         /**
