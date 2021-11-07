@@ -1,12 +1,19 @@
 package com.abumuhab.tuneplayer.adapters
 
+import android.graphics.ColorFilter
+import android.util.Size
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.abumuhab.tuneplayer.R
 import com.abumuhab.tuneplayer.databinding.AudioTileBinding
 import com.abumuhab.tuneplayer.models.Audio
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AudioAdapter : ListAdapter<Audio, AudioAdapter.ViewHolder>(AudioDiffCallback()) {
     class ViewHolder(private val binding: AudioTileBinding) :

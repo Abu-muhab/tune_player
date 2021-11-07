@@ -103,28 +103,15 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         if (parentId == "tracks") {
-            if (mediaItems.isNotEmpty()) {
-                result.sendResult(mediaItems)
-                return
+            audioRepository.listAudioFiles().forEach {
+                val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
+                    .setMediaId(it.id)
+                    .setMediaUri(it.uri)
+                    .setTitle(it.name)
+                    .setSubtitle(it.artiste)
+                mediaItems.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
             }
-
-            val job = SupervisorJob()
-            val scope = CoroutineScope(Dispatchers.Main.immediate + job)
-
-            result.detach()
-
-            scope.launch {
-                audioRepository.listAudioFiles().toList().forEach {
-                    val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                        .setMediaId(it.id)
-                        .setMediaUri(it.uri)
-                        .setIconBitmap(it.thumbnail)
-                        .setTitle(it.name)
-                        .setSubtitle(it.artiste)
-                    mediaItems.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
-                }
-                result.sendResult(mediaItems)
-            }
+            result.sendResult(mediaItems)
         } else {
             result.sendResult(null)
         }

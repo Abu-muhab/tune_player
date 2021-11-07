@@ -21,7 +21,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:src="@drawable/lweis"
-            app:imageBitmap="@{audio.thumbnail}"
+            app:audioThumbnail="@{audio}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

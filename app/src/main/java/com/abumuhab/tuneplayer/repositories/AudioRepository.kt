@@ -15,8 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AudioRepository(private val application: Application) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    suspend fun listAudioFiles() = channelFlow {
+    fun listAudioFiles(): MutableList<Audio> {
         val collection = MediaStore.Audio.Media.getContentUri(
             MediaStore.VOLUME_EXTERNAL
         )
@@ -41,7 +40,7 @@ class AudioRepository(private val application: Application) {
                 sortOrder
             )
 
-        val audios = arrayListOf<Audio>()
+        val audios = mutableListOf<Audio>()
 
         query?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
@@ -64,24 +63,6 @@ class AudioRepository(private val application: Application) {
             }
         }
 
-        /**
-         * launch several coroutines to get thumbnails from file for each audio object in parallel
-         */
-        audios.forEach {
-            launch {
-                withContext(Dispatchers.IO) {
-                    try {
-                        it.thumbnail = application.contentResolver.loadThumbnail(
-                            it.uri,
-                            Size(200, 200),
-                            null
-                        )
-                    } catch (err: Exception) {
-                        //do nothing
-                    }
-                }
-                send(it)
-            }
-        }
+        return audios
     }
 }

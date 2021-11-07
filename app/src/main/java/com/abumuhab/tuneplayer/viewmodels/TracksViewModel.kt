@@ -49,16 +49,11 @@ class TracksViewModel(private val application: Application) : ViewModel() {
                                     it.description.title.toString(),
                                     it.description.mediaId!!,
                                     it.description.mediaUri!!,
-                                    it.description.subtitle.toString(),
-                                    it.description.iconBitmap
+                                    it.description.subtitle.toString()
                                 )
                             }
                         }
                     })
-            }
-
-            override fun onConnectionFailed() {
-                Log.i("HAHAHAH", "FAILED")
             }
         }
         mediaBrowser = MediaBrowserCompat(
