@@ -27,9 +27,10 @@
         </KeyFrameSet>
     </Transition>
     <Transition
+        android:id="@+id/second"
         motion:constraintSetEnd="@+id/end"
         motion:constraintSetStart="@id/start"
-        motion:duration="1000">
+        motion:duration="400">
         <KeyFrameSet>
             <KeyPosition
                 motion:framePosition="10"

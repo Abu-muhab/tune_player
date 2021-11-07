@@ -21,7 +21,7 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
     var queue: MutableList<MediaSessionCompat.QueueItem>? = null
 
     val showMusicControls = MutableLiveData<Boolean>()
-    val nowPlaying = MutableLiveData<Audio>()
+    var nowPlaying = MutableLiveData<Audio>()
 
 
     init {
@@ -38,21 +38,25 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
                     mediaController.registerCallback(object : MediaControllerCompat.Callback() {
                         override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
                             state?.let {
-                                if (queue != null) {
+                                queue?.let { queue ->
                                     state.activeQueueItemId
                                     val nowPlayingQueuePosition =
-                                        findItemPositionInList(queue!!) { queueItem ->
+                                        findItemPositionInList(queue) { queueItem ->
                                             state.activeQueueItemId == queueItem.queueId
                                         }
-                                    Log.i(
-                                        "QUQUQUQUQUQU",
-                                        queue!![nowPlayingQueuePosition].description.title.toString()
+
+                                    val mediaDescription =
+                                        queue[nowPlayingQueuePosition].description
+
+                                    nowPlaying.value = Audio(
+                                        mediaDescription.title.toString(),
+                                        mediaDescription.mediaId.toString(),
+                                        mediaDescription.mediaUri!!,
+                                        mediaDescription.subtitle.toString()
                                     )
 
-                                    nowPlaying
-
-                                    if(showMusicControls.value==false){
-                                        showMusicControls.value=true
+                                    if (showMusicControls.value == false) {
+                                        showMusicControls.value = true
                                     }
                                 }
                             }

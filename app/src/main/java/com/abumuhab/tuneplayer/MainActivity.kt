@@ -38,9 +38,9 @@ class MainActivity : AppCompatActivity() {
         viewModel.showMusicControls.observe(this) {
             it?.let {
                 if (it) {
-                    CoroutineScope(Dispatchers.Main.immediate).launch {
-                        binding.motionLayout.transitionToEnd()
-                    }
+//                    binding.motionLayout.transitionToEnd()
+//                    binding.motionLayout.setTransition(R.id.second)
+//                    binding.motionLayout.transitionToEnd()
                 }
             }
         }

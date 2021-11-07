@@ -10,17 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.abumuhab.tuneplayer.databinding.AudioTileBinding
 import com.abumuhab.tuneplayer.models.Audio
 
-class AudioAdapter(private val mediaController: MediaControllerCompat?) :
+class AudioAdapter(
+    private val mediaController: MediaControllerCompat?,
+    private val onPressed: () -> Unit
+) :
     ListAdapter<Audio, AudioAdapter.ViewHolder>(AudioDiffCallback()) {
     class ViewHolder(
         private val binding: AudioTileBinding,
         private val mediaController: MediaControllerCompat?
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(audio: Audio) {
+        fun bind(audio: Audio, onPressed: () -> Unit) {
             binding.audio = audio
             binding.tileContainer.setOnClickListener {
                 mediaController?.transportControls?.playFromMediaId(audio.id, null)
+                onPressed()
             }
             binding.executePendingBindings()
         }
@@ -34,7 +38,7 @@ class AudioAdapter(private val mediaController: MediaControllerCompat?) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val audio = getItem(position)
-        holder.bind(audio)
+        holder.bind(audio,onPressed)
     }
 }
 

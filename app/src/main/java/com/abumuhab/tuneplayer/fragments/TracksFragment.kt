@@ -7,10 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.abumuhab.tuneplayer.R
 import com.abumuhab.tuneplayer.adapters.AudioAdapter
+import com.abumuhab.tuneplayer.databinding.ActivityMainBinding
 import com.abumuhab.tuneplayer.databinding.FragmentTracksBinding
 import com.abumuhab.tuneplayer.viewmodels.NowPLayingViewModelFactory
 import com.abumuhab.tuneplayer.viewmodels.TracksViewModel
@@ -38,7 +40,12 @@ class TracksFragment : Fragment() {
 
         viewModel.mediaController.observe(viewLifecycleOwner) {
             it?.let {
-                audioAdapter = AudioAdapter(it)
+                audioAdapter = AudioAdapter(it) {
+                    val motionLayout =
+                        (activity as AppCompatActivity).findViewById<MotionLayout>(R.id.motionLayout)
+                    motionLayout.setTransition(R.id.second)
+                    motionLayout.transitionToEnd()
+                }
                 binding.audioList.adapter = audioAdapter
 
                 viewModel.audios.observe(viewLifecycleOwner) {
