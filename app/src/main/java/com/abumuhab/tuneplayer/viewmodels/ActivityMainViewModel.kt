@@ -9,6 +9,7 @@ import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +26,7 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
     val showMusicControls = MutableLiveData<Boolean>()
     var nowPlaying = MutableLiveData<Audio>()
     var isPaused = MutableLiveData<Boolean>()
+    var nowPlayingProgress = MutableLiveData<Float>()
 
 
     init {
@@ -77,6 +79,12 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
 
                                 //TODO: fetch queue
                             }
+
+                            /**
+                             * Compute progress percentage
+                             */
+                            nowPlayingProgress.value =
+                                state.position.toFloat() / bundle!!.getInt("duration").toFloat()
 
                             queue?.let { queue ->
                                 state.activeQueueItemId

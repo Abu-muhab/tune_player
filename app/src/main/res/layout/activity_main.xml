@@ -173,19 +173,21 @@
             app:layout_constraintTop_toBottomOf="@+id/audioName"
             tools:text="Dean Lewis" />
 
-        <com.google.android.material.progressindicator.LinearProgressIndicator
+        <com.google.android.material.slider.Slider
             android:id="@+id/musicProgress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
             android:layout_marginTop="35dp"
             android:layout_marginEnd="35dp"
-            android:indeterminate="true"
-            app:indicatorColor="@color/teal_700"
+            app:labelBehavior="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/artistName"
-            app:trackColor="@color/primaryLightColor" />
+            app:thumbColor="@color/teal_700"
+            app:thumbRadius="8dp"
+            app:trackColorActive="@color/teal_700"
+            app:trackColorInactive="?attr/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/skipNext"

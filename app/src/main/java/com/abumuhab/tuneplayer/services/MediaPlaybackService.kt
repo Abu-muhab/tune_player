@@ -129,8 +129,8 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                     val builder =
                         NotificationCompat.Builder(applicationContext, "Playback").apply {
                             setOngoing(true)
-                            setContentTitle("New alarm")
-                            setSmallIcon(R.drawable.ic_baseline_favorite_border_24)
+                            setContentTitle("Now Playing")
+                            setSmallIcon(R.drawable.ic_baseline_music_note_24)
                             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         }
                     startForeground(-8000, builder.build())
@@ -227,7 +227,6 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                                     PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
                         )
                     } else {
-                        Log.i("PLAYING", "NO")
                         stateBuilder.setActiveQueueItemId(activeQueueItemId!!).setState(
                             PlaybackStateCompat.STATE_PAUSED,
                             mediaPlayer!!.currentPosition.toLong(),
@@ -245,8 +244,9 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                     bundle.putString("subtitle", nowPlaying!!.description.subtitle.toString())
                     bundle.putString("id", nowPlaying!!.description.mediaId)
                     bundle.putString("uri", nowPlaying!!.description.mediaUri.toString())
-                    stateBuilder.setExtras(bundle)
+                    bundle.putInt("duration", mediaPlayer!!.duration)
 
+                    stateBuilder.setExtras(bundle)
                     mediaSession?.setPlaybackState(stateBuilder.build())
                     delay(500)
                 } catch (e: Exception) {
@@ -278,6 +278,8 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
     ) {
         if (parentId == "tracks") {
             audioRepository.listAudioFiles().forEach {
+//                val bundle = Bundle()
+//                val bun
                 val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
                     .setMediaId(it.id)
                     .setMediaUri(it.uri)
