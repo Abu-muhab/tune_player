@@ -61,7 +61,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.musicProgress.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
             override fun onStartTrackingTouch(slider: Slider) {
-
+                /**
+                 * Do nothing
+                 */
             }
 
             override fun onStopTrackingTouch(slider: Slider) {

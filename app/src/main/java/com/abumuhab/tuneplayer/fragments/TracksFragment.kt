@@ -40,7 +40,7 @@ class TracksFragment : Fragment() {
 
         viewModel.mediaController.observe(viewLifecycleOwner) {
             it?.let {
-                audioAdapter = AudioAdapter(it) {
+                audioAdapter = AudioAdapter(it,viewModel.nowPlaying,viewLifecycleOwner) {
                     val motionLayout =
                         (activity as AppCompatActivity).findViewById<MotionLayout>(R.id.motionLayout)
                     motionLayout.setTransition(R.id.second)

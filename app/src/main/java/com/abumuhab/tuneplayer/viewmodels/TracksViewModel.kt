@@ -2,8 +2,11 @@ package com.abumuhab.tuneplayer.viewmodels
 
 import android.app.Application
 import android.content.ComponentName
+import android.media.session.PlaybackState
+import android.net.Uri
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,6 +23,8 @@ class TracksViewModel(private val application: Application) : ViewModel() {
 
     val audios = MutableLiveData<List<Audio>>()
 
+    val nowPlaying = MutableLiveData<Audio>()
+
     init {
         connectToMediaPlaybackService()
     }
@@ -31,10 +36,39 @@ class TracksViewModel(private val application: Application) : ViewModel() {
                     _mediaController =
                         MediaControllerCompat(application.applicationContext, token).apply {
                             registerCallback(object : MediaControllerCompat.Callback() {
+                                override fun onPlaybackStateChanged(state: PlaybackStateCompat?) {
+                                    if (audios.value?.isNotEmpty() == true) {
+                                        val bundle = state!!.extras
+                                        val audio = Audio(
+                                            bundle!!.getString("title").toString(),
+                                            bundle.getString("id").toString(),
+                                            Uri.parse(bundle.getString("uri").toString()),
+                                            bundle.getString("subtitle").toString()
+                                        )
+                                        if ((state.playbackState as PlaybackState).state == PlaybackStateCompat.STATE_PLAYING) {
+                                            audio.isPlaying = true
+                                        }
+                                        nowPlaying.value=audio
 
+//                                        val audios = audios.value!!.toMutableList()
+//                                        audios.forEach {
+//                                            if (it.name == audio.name) {
+//                                                it.nowPlaying = true
+//                                                if ((state.playbackState as PlaybackState).state == PlaybackStateCompat.STATE_PLAYING) {
+//                                                    it.isPlaying = true
+//                                                }
+//                                            } else {
+//                                                it.nowPlaying = false
+//                                                it.isPlaying = false
+//                                            }
+//                                        }
+
+//                                        this@TracksViewModel.audios.value = audios
+                                    }
+                                }
                             })
                         }
-                    mediaController.value=_mediaController
+                    mediaController.value = _mediaController
                 }
                 mediaBrowser.subscribe(
                     "tracks",

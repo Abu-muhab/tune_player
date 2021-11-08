@@ -6,5 +6,7 @@ data class Audio(
     val name: String,
     val id: String,
     var uri: Uri,
-    val artiste: String
+    val artiste: String,
+    var nowPlaying: Boolean=false,
+    var isPlaying: Boolean=false
 )

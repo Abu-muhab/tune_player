@@ -12,11 +12,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tileContainer"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
+        android:clickable="true"
+        android:focusable="true"
         android:padding="15dp">
 
         <ImageView
@@ -34,11 +34,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{audio.name}"
             android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintEnd_toStartOf="@id/moreOptions"
+            app:layout_constraintEnd_toStartOf="@id/equalizer"
             app:layout_constraintStart_toEndOf="@+id/thumbnail"
             app:layout_constraintTop_toTopOf="@+id/thumbnail"
             tools:text="Be Alright" />
@@ -48,12 +49,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="@{audio.artiste}"
             android:textColor="@color/primaryLightColor"
             app:layout_constraintBottom_toBottomOf="@id/thumbnail"
-            app:layout_constraintEnd_toStartOf="@id/moreOptions"
+            app:layout_constraintEnd_toStartOf="@id/equalizer"
             app:layout_constraintStart_toEndOf="@+id/thumbnail"
             app:layout_constraintTop_toBottomOf="@+id/name"
             tools:text="Dean Lewis" />
@@ -67,5 +69,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:tint="?attr/colorOnPrimary" />
+
+        <es.claucookie.miniequalizerlibrary.EqualizerView
+            android:id="@+id/equalizer"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"
+            app:animDuration="3500"
+            app:foregroundColor="@color/teal_700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/moreOptions"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
