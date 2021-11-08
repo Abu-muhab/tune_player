@@ -3,16 +3,8 @@ package com.abumuhab.tuneplayer.repositories
 import android.app.Application
 import android.content.ContentUris
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
-import android.util.Size
 import com.abumuhab.tuneplayer.models.Audio
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AudioRepository(private val application: Application) {
     fun listAudioFiles(): MutableList<Audio> {

@@ -12,7 +12,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.abumuhab.tuneplayer.R
 import com.abumuhab.tuneplayer.adapters.AudioAdapter
-import com.abumuhab.tuneplayer.databinding.ActivityMainBinding
 import com.abumuhab.tuneplayer.databinding.FragmentTracksBinding
 import com.abumuhab.tuneplayer.viewmodels.NowPLayingViewModelFactory
 import com.abumuhab.tuneplayer.viewmodels.TracksViewModel
