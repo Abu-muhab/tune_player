@@ -45,7 +45,6 @@ class TracksViewModel(
         ) {
             onPermissionGranted()
         } else {
-            Log.i("LAUNCHHHH","LLLLLL")
             requestPermissionLauncher.launch(
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
