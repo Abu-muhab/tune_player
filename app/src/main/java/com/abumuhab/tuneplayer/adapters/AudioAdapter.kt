@@ -1,8 +1,6 @@
 package com.abumuhab.tuneplayer.adapters
 
-import android.opengl.Visibility
 import android.support.v4.media.session.MediaControllerCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

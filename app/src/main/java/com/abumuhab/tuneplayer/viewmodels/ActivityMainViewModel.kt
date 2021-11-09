@@ -4,12 +4,10 @@ import android.app.Application
 import android.content.ComponentName
 import android.media.session.PlaybackState
 import android.net.Uri
-import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -83,8 +81,6 @@ class ActivityMainViewModel(private val application: Application) : ViewModel() 
                                     bundle.getString("subtitle").toString()
                                 )
                                 nowPlaying.value = audio
-
-                                //TODO: fetch queue
                             }
 
                             /**

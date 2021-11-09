@@ -21,7 +21,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
     private var mediaSession: MediaSessionCompat? = null
     private var mediaPlayer: MediaPlayer? = null
     private lateinit var stateBuilder: PlaybackStateCompat.Builder
-    private val mediaItems = arrayListOf<MediaBrowserCompat.MediaItem>()
+    private var mediaItems = arrayListOf<MediaBrowserCompat.MediaItem>()
     private lateinit var audioRepository: AudioRepository
 
     private var currentQueue: MutableList<MediaSessionCompat.QueueItem>? = null
@@ -127,7 +127,7 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
                     /**
                      * Start in foreground and display ongoing notification
                      */
-                    //TODO: replace placeholder notification
+                    //TODO: replace placeholder notification with notifications with playback controls
                     createNotificationChannel(applicationContext, "Playback", "Playback")
                     val builder =
                         NotificationCompat.Builder(applicationContext, "Playback").apply {
@@ -280,17 +280,20 @@ class MediaPlaybackService : MediaBrowserServiceCompat() {
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>
     ) {
         if (parentId == "tracks") {
-            audioRepository.listAudioFiles().forEach {
-//                val bundle = Bundle()
-//                val bun
-                val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
-                    .setMediaId(it.id)
-                    .setMediaUri(it.uri)
-                    .setTitle(it.name)
-                    .setSubtitle(it.artiste)
-                mediaItems.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
+            try {
+                mediaItems = arrayListOf()
+                audioRepository.listAudioFiles().forEach {
+                    val mediaDescriptionBuilder = MediaDescriptionCompat.Builder()
+                        .setMediaId(it.id)
+                        .setMediaUri(it.uri)
+                        .setTitle(it.name)
+                        .setSubtitle(it.artiste)
+                    mediaItems.add(MediaBrowserCompat.MediaItem(mediaDescriptionBuilder.build(), 0))
+                }
+                result.sendResult(mediaItems)
+            } catch (e: Exception) {
+                result.sendResult(null)
             }
-            result.sendResult(mediaItems)
         } else {
             result.sendResult(null)
         }

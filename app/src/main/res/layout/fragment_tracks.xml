@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.abumuhab.tuneplayer.viewmodels.TracksViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -10,14 +19,46 @@
         android:orientation="vertical"
         tools:context=".fragments.TracksFragment">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorPrimary"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.storagePermissionGranted?View.GONE:View.VISIBLE}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:src="@drawable/ic_undraw_audio_player_re_cl20" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/permissionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primaryLightColor"
+                android:clickable="true"
+                android:enabled="true"
+                android:focusable="true"
+                android:onClick="@{()->viewModel.checkPermission()}"
+                android:text="Grant Permissions"
+                android:textColor="?attr/colorOnPrimary" />
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/audioList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="@{viewModel.storagePermissionGranted?View.VISIBLE:View.GONE}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
